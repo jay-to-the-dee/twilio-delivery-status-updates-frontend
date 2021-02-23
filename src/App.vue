@@ -1,19 +1,26 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <b-container id="app" class="bv-example-row">
+    <b-row class="text-center">
+      <b-col cols="1"> 
+      <SMSList />
+      </b-col>
+      <b-col cols="3"><SMSComposerAndStatus /></b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SMSList from './components/SMSList.vue'
+import SMSComposerAndStatus from './components/SMSComposerAndStatus.vue'
+
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    SMSList,
+    SMSComposerAndStatus
+  },
+};
 </script>
 
 <style>
@@ -23,6 +30,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  width: 100%;
 }
 </style>
