@@ -8,9 +8,14 @@
         :state="phoneValidation"
       />
       <b-form-invalid-feedback :state="phoneValidation">
-        Phone number must be 5-16 digits long.
+        Phone number must be
+        <a href="https://www.twilio.com/docs/glossary/what-e164"
+          >E164 compliant (like +14155552671)</a
+        >
       </b-form-invalid-feedback>
-      <b-form-valid-feedback :state="phoneValidation" />
+      <b-form-valid-feedback :state="phoneValidation">
+        Phone number valid
+      </b-form-valid-feedback>
 
       <label for="sms-message">Message:</label>
       <b-form-textarea id="sms-message" v-model="msgForm.body" />
@@ -32,28 +37,33 @@ export default {
   },
   computed: {
     phoneValidation() {
-      return this.msgForm.to.length > 4 && this.msgForm.to.length < 16;
+      const regEx = /^\+[1-9]\d{10,14}$/;
+      return regEx.test(this.msgForm.to);
     },
   },
   methods: {
-    onSubmit(event) {
+    async onSubmit(event) {
       event.preventDefault();
 
-      fetch(`${process.env.VUE_APP_CALLBACK_BASE||''}/sendSMS`, {
-        method: "post",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(this.msgForm),
-      })
-        .then((x) => x.json())
-        .then((data) => {
-          // window.alert(`SMS submitted to Twilio with SID: ${data.sid}`);
-          this.$store.commit( 'addSMS', data );
-        })
-        .catch((error) => {
-          window.alert("SMS submitted to Twilio failed", error);
-        });
+      const fetchRequest = await fetch(
+        `http://${process.env.VUE_APP_CALLBACK_BASE ||
+          location.hostname}/sendSMS`,
+        {
+          method: "post",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(this.msgForm),
+        }
+      );
+
+      if (fetchRequest.status == 200)
+        this.$store.commit("addSMS", await fetchRequest.json());
+      else {
+        const errText = await fetchRequest.text();
+        console.error(errText);
+        window.alert(`SMS submission to Twilio failed :( See ${errText}`);
+      }
     },
   },
 };

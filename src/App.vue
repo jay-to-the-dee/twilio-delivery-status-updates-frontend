@@ -1,7 +1,7 @@
 <template>
   <b-container id="app">
     <b-row class="text-center">
-      <b-col cols="3"  class="sms-list">
+      <b-col cols="3" class="sms-list">
         <SMSList />
       </b-col>
       <b-col cols="1" />
@@ -17,12 +17,22 @@
 // import SMSList from './components/SMSList.vue'
 import SMSComposerAndStatus from "./components/SMSComposerAndStatus.vue";
 import SMSList from "./components/SMSList.vue";
+import { io } from "socket.io-client";
 
 export default {
   name: "App",
   components: {
     SMSList,
     SMSComposerAndStatus,
+  },
+  created: function() {
+    const URL = `http://${process.env.VUE_APP_SOCKET_HOST}`;
+    const socket = io(URL, { autoConnect: true });
+
+    socket.on("SmsStatusUpdate", ({ MessageSid, MessageStatus }) => {
+      console.log(`SID: ${MessageSid}, Status: ${MessageStatus}`);
+      this.$store.commit("updateSMSStatus", { MessageSid, MessageStatus });
+    });
   },
 };
 </script>
@@ -40,8 +50,8 @@ export default {
   margin: 10px;
 }
 .sms-list {
-  background-color: #eee;
+  /** background-color: #eee; **/
   padding: 5px;
-  border-radius:10px;
+  border-radius: 10px;
 }
 </style>
