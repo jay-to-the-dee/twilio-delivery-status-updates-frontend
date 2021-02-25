@@ -20,7 +20,8 @@ export default new Vuex.Store({
       try {
         state.SMSsids.find((x) => x.sid == MessageSid).status = MessageStatus;
       } catch (e) {
-        console.error(e);
+        //Ignore: This will be a status update from an old session
+        // console.error(e);
       }
     },
   },
