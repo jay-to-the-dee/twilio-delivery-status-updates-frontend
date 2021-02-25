@@ -16,8 +16,12 @@ export default new Vuex.Store({
       console.log(`Added SMS SID ${sms.sid} to Vuex store`);
       state.SMSsids.push(sms);
     },
-    updateSMSStatus(state, {MessageSid, MessageStatus} ) {
-      state.SMSsids.find(x => x.sid == MessageSid).status = MessageStatus;
+    updateSMSStatus(state, { MessageSid, MessageStatus }) {
+      try {
+        state.SMSsids.find((x) => x.sid == MessageSid).status = MessageStatus;
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
   getters: {
