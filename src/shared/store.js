@@ -17,7 +17,6 @@ export default new Vuex.Store({
       state.SMSsids.push(sms);
     },
     updateSMSStatus(state, {MessageSid, MessageStatus} ) {
-      console.log(MessageStatus);
       state.SMSsids.find(x => x.sid == MessageSid).status = MessageStatus;
     },
   },

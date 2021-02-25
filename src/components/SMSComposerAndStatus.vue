@@ -46,8 +46,7 @@ export default {
       event.preventDefault();
 
       const fetchRequest = await fetch(
-        `http://${process.env.VUE_APP_CALLBACK_BASE ||
-          location.hostname}/sendSMS`,
+        `/sendSMS`,
         {
           method: "post",
           headers: {

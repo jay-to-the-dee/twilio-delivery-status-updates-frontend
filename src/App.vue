@@ -30,7 +30,7 @@ export default {
     const socket = io(URL, { autoConnect: true });
 
     socket.on("SmsStatusUpdate", ({ MessageSid, MessageStatus }) => {
-      console.log(`SID: ${MessageSid}, Status: ${MessageStatus}`);
+      console.log(`Incoming SmsStatusUpdate via Socket.IO - SID: ${MessageSid}, Status: ${MessageStatus}`);
       this.$store.commit("updateSMSStatus", { MessageSid, MessageStatus });
     });
   },
