@@ -26,7 +26,7 @@ export default {
     SMSComposerAndStatus,
   },
   created: function() {
-    const URL = `http://${process.env.VUE_APP_SOCKET_HOST}`;
+    const URL = `//${location.host}`; //Suport both HTTP & HTTPS socket-io connection
     const socket = io(URL, { autoConnect: true });
 
     socket.on("SmsStatusUpdate", ({ MessageSid, MessageStatus }) => {
