@@ -6,6 +6,7 @@
         v-model="msgForm.to"
         id="sms-number-to"
         :state="phoneValidation"
+        placeholder="+442071838750"
       />
       <b-form-invalid-feedback :state="phoneValidation">
         Phone number must be
@@ -18,7 +19,10 @@
       </b-form-valid-feedback>
 
       <label for="sms-message">Message:</label>
-      <b-form-textarea id="sms-message" v-model="msgForm.body" />
+      <b-form-textarea id="sms-message" 
+      v-model="msgForm.body"
+      placeholder="Enter your SMS message here"
+       />
 
       <b-button type="submit" variant="primary" class="pad">Submit</b-button>
     </b-form>
