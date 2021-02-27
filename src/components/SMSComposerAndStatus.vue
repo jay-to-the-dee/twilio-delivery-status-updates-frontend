@@ -16,15 +16,14 @@
       </b-form-invalid-feedback>
       <b-form-valid-feedback :state="phoneValidation">
         Phone number valid
-      </b-form-valid-feedback>  
+      </b-form-valid-feedback>
 
       <label for="sms-message">Message:</label>
-      <b-form-textarea id="sms-message" 
-      v-model="msgForm.body"
-      placeholder="Enter your SMS message here"
-       />
-
-       <input type="hidden" name="callbackHost" class="form-control" :value="getCallbackHost">
+      <b-form-textarea
+        id="sms-message"
+        v-model="msgForm.body"
+        placeholder="Enter your SMS message here"
+      />
 
       <b-button type="submit" variant="primary" class="pad">Submit</b-button>
     </b-form>
@@ -38,6 +37,7 @@ export default {
       msgForm: {
         to: "",
         body: "",
+        callbackHost: "",
       },
     };
   },
@@ -46,24 +46,19 @@ export default {
       const regEx = /^\+[1-9]\d{10,14}$/;
       return regEx.test(this.msgForm.to);
     },
-    getCallbackHost() {
-      return document.location.origin;
-    }
   },
   methods: {
     async onSubmit(event) {
       event.preventDefault();
 
-      const fetchRequest = await fetch(
-        `/sendSMS`,
-        {
-          method: "post",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(this.msgForm),
-        }
-      );
+      const callbackHost = document.location.origin;
+      const fetchRequest = await fetch(`/sendSMS`, {
+        method: "post",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ ...this.msgForm, callbackHost }),
+      });
 
       if (fetchRequest.status == 200)
         this.$store.commit("addSMS", await fetchRequest.json());
